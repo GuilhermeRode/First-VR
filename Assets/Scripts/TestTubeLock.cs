@@ -4,6 +4,8 @@ public class TestTubeLock : MonoBehaviour
 {
  [SerializeField]
  private Transform rackTopLimit; // ponto acima do rack
+ [SerializeField]
+ private Transform socketPoint; // ponto no meio do furo do rack
  private UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable grab;
  private Rigidbody rb;
  private bool isLockedInRack = true;
@@ -17,7 +19,7 @@ public class TestTubeLock : MonoBehaviour
  {
  if (isLockedInRack)
  {
- CheckIfReleased();
+ CheckIfReleased(); 
  }
  }
  void LockInRack()
@@ -25,17 +27,33 @@ public class TestTubeLock : MonoBehaviour
  rb.constraints = RigidbodyConstraints.FreezeRotation
  | RigidbodyConstraints.FreezePositionX
  | RigidbodyConstraints.FreezePositionZ;
+ isLockedInRack = true;
  }
  void UnlockFromRack()
  {
  rb.constraints = RigidbodyConstraints.None;
  isLockedInRack = false;
- } 
+ }
  void CheckIfReleased()
  {
  if (transform.position.y > rackTopLimit.position.y)
  {
  UnlockFromRack();
  }
+ }
+ private void OnTriggerEnter(Collider other)
+ {
+ if (other.CompareTag("TubeSocket") && !isLockedInRack)
+ {
+ SnapToSocket();
+ }
+ }
+ void SnapToSocket()
+ {
+ transform.position = socketPoint.position;
+ transform.rotation = socketPoint.rotation;
+ rb.linearVelocity = Vector3.zero;
+ rb.angularVelocity = Vector3.zero;
+ LockInRack();
  }
 } 
