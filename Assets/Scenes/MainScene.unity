@@ -1342,7 +1342,7 @@ Transform:
   m_GameObject: {fileID: 450926606}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.06, y: 0, z: -4.58}
+  m_LocalPosition: {x: -5.92, y: 0, z: -4.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1524,7 +1524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c950cbc32c349944af069dc94368592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShowMessageNaArea
-  playerCamera: {fileID: 1277884505}
+  playerCamera: {fileID: 588496796}
   messageObject: {fileID: 563354139}
   locomotionSystem: {fileID: 866170191}
   leftRay: {fileID: 1510243996}
@@ -3793,11 +3793,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1233254439}
   m_CullTransparentMesh: 1
---- !u!4 &1277884505 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1680501587, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
-  m_PrefabInstance: {fileID: 656672568}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1285056151 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4922582553321831162, guid: 76f3439a0ae796e4b81bee3f91f888ee, type: 3}
