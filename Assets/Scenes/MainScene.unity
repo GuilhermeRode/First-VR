@@ -535,12 +535,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13601914}
     - target: {fileID: 8260440689860001654, guid: 516f487df69ffb1468349b392aa5191f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260440689860001654, guid: 516f487df69ffb1468349b392aa5191f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.5
       objectReference: {fileID: 0}
     - target: {fileID: 8260440689860001654, guid: 516f487df69ffb1468349b392aa5191f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 1.2621803
       objectReference: {fileID: 0}
     - target: {fileID: 8260440689860001654, guid: 516f487df69ffb1468349b392aa5191f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1106,7 +1110,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 8713ce1a007bd4446b0ddb55eef38cc4, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.45
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1114,7 +1118,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.3
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -1998,7 +2002,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 72b847457babaa54496fecaadc9bbadc, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.48
+      value: 0.38604
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 72b847457babaa54496fecaadc9bbadc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2006,7 +2010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 72b847457babaa54496fecaadc9bbadc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.2
+      value: 2.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 72b847457babaa54496fecaadc9bbadc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2490,7 +2494,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 8713ce1a007bd4446b0ddb55eef38cc4, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.45
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -2498,7 +2502,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.3
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -3577,7 +3581,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 8713ce1a007bd4446b0ddb55eef38cc4, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.45
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3585,7 +3589,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.3
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
