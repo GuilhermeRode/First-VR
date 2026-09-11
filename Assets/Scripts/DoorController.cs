@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 using System.Collections;
 
 // Anexe este script no objeto "Dobradica" (o pivô vazio, não na folha da porta)
@@ -12,6 +13,9 @@ public class DoorController : MonoBehaviour
 
     [Tooltip("Velocidade da animação de abrir/fechar")]
     public float velocidadeAbertura = 2f;
+
+    [Tooltip("Área de teleporte do outro lado da porta, habilitada só quando a porta está aberta")]
+    public TeleportationArea teleporte;
 
     private bool aberta = false;
     private Quaternion rotacaoFechada;
@@ -31,6 +35,10 @@ public class DoorController : MonoBehaviour
     {
         aberta = !aberta;
 
+        // começou a fechar: trava o teleporte na hora, não espera a porta terminar de fechar
+        if (!aberta && teleporte != null)
+            teleporte.enabled = false;
+
         if (rotacionando != null)
             StopCoroutine(rotacionando);
 
@@ -45,5 +53,9 @@ public class DoorController : MonoBehaviour
             yield return null;
         }
         transform.localRotation = alvo;
+
+        // só libera o teleporte quando a porta termina de abrir de verdade
+        if (aberta && teleporte != null)
+            teleporte.enabled = true;
     }
 }
