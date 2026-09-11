@@ -12,6 +12,10 @@ public class DerramarLiquido : MonoBehaviour
  [SerializeField]
  private float taxaPorSegundo = 20f; // unidades de volume transferidas por segundo
 
+ [Header("RN03 - áudio do derramar")]
+ [SerializeField]
+ private AudioSource audioDerramar;
+
  private bool inZonaDerramar = false;
  private bool estahDerramando = false;
 
@@ -41,12 +45,19 @@ public class DerramarLiquido : MonoBehaviour
  void Pour()
  {
  estahDerramando = true;
+ if (audioDerramar != null)
+ audioDerramar.Play();
  print("Ingrediente derramado!");
  }
 
  void PararDeDerramar()
  {
+ if (!estahDerramando)
+ return;
+
  estahDerramando = false;
+ if (audioDerramar != null)
+ audioDerramar.Stop();
  }
 
  void Transferir(float deltaTime)
