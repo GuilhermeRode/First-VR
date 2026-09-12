@@ -17,13 +17,23 @@ public class DoorController : MonoBehaviour
     [Tooltip("Área de teleporte do outro lado da porta, habilitada só quando a porta está aberta")]
     public TeleportationArea teleporte;
 
+    [Header("RN04 - trava do puzzle")]
+    [Tooltip("Outline da porta: some quando ela termina de abrir")]
+    public Outline outlinePorta;
+
+    [Tooltip("Se marcado, a porta começa trancada e só abre depois de PuzzleAmostra chamar Destrancar()")]
+    public bool comecaTrancada = true;
+
     private bool aberta = false;
+    private bool trancada;
     private Quaternion rotacaoFechada;
     private Quaternion rotacaoAberta;
     private Coroutine rotacionando;
 
     void Start()
     {
+        trancada = comecaTrancada;
+
         rotacaoFechada = transform.localRotation;
         rotacaoAberta = rotacaoFechada * Quaternion.Euler(0f, anguloAberto, 0f);
 
@@ -31,8 +41,17 @@ public class DoorController : MonoBehaviour
         interactable.selectEntered.AddListener(_ => AlternarPorta());
     }
 
+    /// <summary>RN04 - chamado pelo PuzzleAmostra quando o jogador resolve o puzzle.</summary>
+    public void Destrancar()
+    {
+        trancada = false;
+    }
+
     void AlternarPorta()
     {
+        if (trancada)
+            return;
+
         aberta = !aberta;
 
         // começou a fechar: trava o teleporte na hora, não espera a porta terminar de fechar
@@ -57,5 +76,9 @@ public class DoorController : MonoBehaviour
         // só libera o teleporte quando a porta termina de abrir de verdade
         if (aberta && teleporte != null)
             teleporte.enabled = true;
+
+        // RN04 - o Outline de vitória some quando a porta termina de abrir
+        if (aberta && outlinePorta != null)
+            outlinePorta.OutlineWidth = 0f;
     }
 }

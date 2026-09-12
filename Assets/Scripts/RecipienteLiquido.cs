@@ -37,6 +37,7 @@ public class RecipienteLiquido : MonoBehaviour
     public float Fracao => capacidadeMaxima > 0f ? Mathf.Clamp01(volumeAtual / capacidadeMaxima) : 0f;
     public bool TemLiquido => volumeAtual > 0.0001f;
     public float EspacoDisponivel => Mathf.Max(0f, capacidadeMaxima - volumeAtual);
+    public Color Cor => cor;
 
     private void Awake()
     {
