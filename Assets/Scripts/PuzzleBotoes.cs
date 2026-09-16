@@ -2,12 +2,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit;
 
-/// <summary>
-/// RN05 - Puzzle da segunda sala: a sala tem tres botoes e a porta de correr.
-/// Basta apertar tres vezes o botao do meio pra resolver. Ao resolver: acende o
-/// Outline na porta, toca o som de vitoria e destranca a porta (o Outline some
-/// sozinho quando a porta abre, isso fica com o EventosPortaCorrer).
-/// </summary>
+// RN05: apertar tres vezes o botao do meio destranca a porta de correr.
 public class PuzzleBotoes : MonoBehaviour
 {
     [SerializeField] private XRSimpleInteractable botaoDoMeio;
@@ -37,8 +32,6 @@ public class PuzzleBotoes : MonoBehaviour
             return;
 
         pressoes++;
-        print("Botao do meio pressionado: " + pressoes + "/" + pressoesNecessarias);
-
         if (pressoes >= pressoesNecessarias)
             Resolver();
     }

@@ -2,33 +2,20 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 
-/// <summary>
-/// Porta de correr da segunda sala. O deslize e fisico: o XRGrabInteractable
-/// empurra o Rigidbody e o ConfigurableJoint segura a porta no trilho.
-/// RN05: so pode ser aberta depois do puzzle dos botoes.
-/// RN06: quando abre, libera a area de teleporte pra fora do laboratorio.
-/// </summary>
+// Porta de correr da segunda sala: so abre depois do puzzle dos botoes (RN05)
+// e, aberta, libera o teleporte para fora do laboratorio (RN06).
 public class EventosPortaCorrer : MonoBehaviour
 {
-    private bool isOpen = false;
-    private ConfigurableJoint joint;
     public TeleportationArea teleporte;
-
-    [Header("RN05 - so abre depois do puzzle dos botoes")]
-    [Tooltip("Interactable de arrastar a porta: fica desligado enquanto ela esta trancada")]
     public XRGrabInteractable pegarPorta;
-    [Tooltip("Outline que acende quando o puzzle e resolvido e some quando a porta abre")]
     public Outline outlinePorta;
     public bool comecaTrancada = true;
-
-    [Tooltip("A partir de quanto de deslize a porta conta como aberta")]
     public float aberturaParaAbrir = 0.6f;
-
-    [Tooltip("Layer das paredes. A porta corre dentro do plano da parede, entao os colliders " +
-             "dela precisam ignorar os da parede, senao a porta trava")]
     public string layerDasParedes = "Obsctaculos";
 
+    private ConfigurableJoint joint;
     private bool trancada;
+    private bool aberta;
 
     void Start()
     {
@@ -47,37 +34,26 @@ public class EventosPortaCorrer : MonoBehaviour
             Trancar();
     }
 
-    /// <summary>
-    /// A porta de celeiro corre dentro do mesmo plano da parede (mesma faixa de X),
-    /// entao o collider do painel encostaria na parede o tempo todo e a porta ficaria
-    /// travada. Aqui os colliders dela sao marcados pra ignorar os das paredes - ela
-    /// continua barrando o jogador, que esta em outro layer.
-    /// </summary>
+    // A porta corre no mesmo plano da parede; sem isso ela trava encostada nela.
     private void IgnorarColisaoComAsParedes()
     {
         int layerParede = LayerMask.NameToLayer(layerDasParedes);
         if (layerParede < 0)
-        {
-            Debug.LogWarning($"Layer '{layerDasParedes}' nao existe: a porta pode travar na parede.", this);
             return;
-        }
 
-        Collider[] colidersDaPorta = GetComponentsInChildren<Collider>(true);
-        Collider[] todos = FindObjectsByType<Collider>(FindObjectsSortMode.None);
-
-        foreach (Collider outro in todos)
+        Collider[] colidersDaPorta = GetComponentsInChildren<Collider>();
+        foreach (Collider parede in FindObjectsByType<Collider>(FindObjectsSortMode.None))
         {
-            if (outro.gameObject.layer != layerParede)
+            if (parede.gameObject.layer != layerParede || parede.transform.IsChildOf(transform))
                 continue;
 
-            foreach (Collider meu in colidersDaPorta)
-                Physics.IgnoreCollision(meu, outro, true);
+            foreach (Collider colider in colidersDaPorta)
+                Physics.IgnoreCollision(colider, parede);
         }
     }
 
     private void Trancar()
     {
-        // alem de tirar o grab, trava o eixo do joint pra porta nao ser empurrada
         if (pegarPorta != null)
             pegarPorta.enabled = false;
         if (joint != null)
@@ -93,18 +69,11 @@ public class EventosPortaCorrer : MonoBehaviour
             joint.xMotion = ConfigurableJointMotion.Limited;
     }
 
-    float GetJointLinearX()
+    private float Abertura()
     {
-        // Calcula posicao do anchor no mundo
-        Vector3 worldAnchor = joint.transform.TransformPoint(joint.anchor);
-        Vector3 connectedAnchor = joint.connectedAnchor;
-        // Delta entre anchors
-        Vector3 delta = worldAnchor - connectedAnchor;
-        // Eixo X do joint no espaco global
-        Vector3 axisX = joint.transform.TransformDirection(Vector3.right);
-        // Projecao do deslocamento no eixo X
-        float displacementX = Vector3.Dot(delta, axisX);
-        return displacementX;
+        Vector3 ancora = joint.transform.TransformPoint(joint.anchor);
+        Vector3 eixo = joint.transform.TransformDirection(Vector3.right);
+        return Mathf.Abs(Vector3.Dot(ancora - joint.connectedAnchor, eixo));
     }
 
     void Update()
@@ -112,30 +81,15 @@ public class EventosPortaCorrer : MonoBehaviour
         if (trancada)
             return;
 
-        float abertura = Mathf.Abs(GetJointLinearX());
+        bool passouDoPonto = Abertura() >= aberturaParaAbrir;
+        if (passouDoPonto == aberta)
+            return;
 
-        // abriu
-        if (!isOpen && abertura >= aberturaParaAbrir)
-        {
-            isOpen = true;
+        aberta = passouDoPonto;
+        if (teleporte != null)
+            teleporte.enabled = aberta;
 
-            if (teleporte != null)
-                teleporte.enabled = true;
-
-            // RN05: o Outline some assim que a porta abre
-            if (outlinePorta != null)
-                outlinePorta.OutlineWidth = 0f;
-        }
-        else
-        {
-            // Porta fechou
-            if (isOpen && abertura < aberturaParaAbrir)
-            {
-                isOpen = false;
-
-                if (teleporte != null)
-                    teleporte.enabled = false;
-            }
-        }
+        if (aberta && outlinePorta != null)
+            outlinePorta.OutlineWidth = 0f;
     }
 }

@@ -72,7 +72,7 @@ public class DerramarLiquido : MonoBehaviour
 
  float retirado = origem.Retirar(quantidadeMaxima);
  destino.Adicionar(retirado);
- destino.RegistrarOrigem(origem); // RN02 - mistura a cor deste tubo no bequer
+ destino.RegistrarOrigem(origem);
  }
 
  private void OnTriggerEnter(Collider other)

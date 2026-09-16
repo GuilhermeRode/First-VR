@@ -1,17 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// RN01/RN02 - Representa o líquido dentro de um recipiente (tubo de ensaio ou copo de béquer).
-/// Controla o nível atual e ajusta a escala/posição em Y do mesh do líquido para
-/// representar visualmente o quanto tem dentro, respeitando uma capacidade máxima.
-/// Também controla a cor do líquido: cada tubo tem a sua; o béquer mistura as cores
-/// dos tubos que já derramaram nele (média simples, sem proporção de volume).
-/// </summary>
+// RN01/RN02: nivel e cor do liquido de um tubo de ensaio ou do bequer.
 public class RecipienteLiquido : MonoBehaviour
 {
     [Header("Visual do líquido")]
-    [SerializeField] private Transform liquido; // mesh que representa o líquido (ex.: "... water")
+    [SerializeField] private Transform liquido;
 
     [Tooltip("Escala em Y do mesh do líquido quando está 100% cheio (nesses assets, 1 = cheio, 0 = vazio)")]
     [SerializeField] private float escalaYCheio = 1f;
@@ -52,7 +46,6 @@ public class RecipienteLiquido : MonoBehaviour
         AtualizarCor();
     }
 
-    /// <summary>Tenta retirar "quantidade" do recipiente. Retorna quanto foi realmente retirado.</summary>
     public float Retirar(float quantidade)
     {
         if (quantidade <= 0f) return 0f;
@@ -63,7 +56,6 @@ public class RecipienteLiquido : MonoBehaviour
         return retirado;
     }
 
-    /// <summary>Tenta adicionar "quantidade" ao recipiente. Retorna quanto foi realmente adicionado.</summary>
     public float Adicionar(float quantidade)
     {
         if (quantidade <= 0f) return 0f;
@@ -85,11 +77,7 @@ public class RecipienteLiquido : MonoBehaviour
         liquido.localPosition = new Vector3(liquido.localPosition.x, posYCheio - deltaAltura, liquido.localPosition.z);
     }
 
-    /// <summary>
-    /// RN02 - Registra que "origem" derramou (pelo menos um pouco) neste recipiente.
-    /// Na primeira vez que cada tubo derrama, a cor é recalculada como a média simples
-    /// das cores de todos os tubos que já derramaram até agora (sem pesar por volume).
-    /// </summary>
+    // RN02: a cor passa a ser a media das cores dos tubos que ja derramaram aqui
     public void RegistrarOrigem(RecipienteLiquido origem)
     {
         if (origem == null || origensMisturadas.Contains(origem))
@@ -110,17 +98,13 @@ public class RecipienteLiquido : MonoBehaviour
     {
         if (rendererLiquido == null) return;
 
-        // seta direto na propriedade do URP Lit (_BaseColor) e também na legada (_Color),
-        // porque Renderer.material.color pode não bater na que o shader realmente usa
         Material mat = rendererLiquido.material;
         if (mat.HasProperty("_BaseColor"))
             mat.SetColor("_BaseColor", cor);
         if (mat.HasProperty("_Color"))
             mat.SetColor("_Color", cor);
 
-        // esses materiais de líquido vêm com uma emissão colorida própria do asset
-        // (ex.: verde, magenta) que ofusca a cor que a gente seta acima. Zera pra a
-        // cor do líquido ser só a que definimos.
+        // os materiais do pack vem com emissao colorida
         if (mat.HasProperty("_EmissionColor"))
             mat.SetColor("_EmissionColor", Color.black);
     }

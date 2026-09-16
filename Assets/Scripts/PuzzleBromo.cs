@@ -4,11 +4,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit;
 
-/// <summary>
-/// RN04 - Puzzle "Br": o quadro mostra "__EAKING BAD" com um soquete no lugar do Br.
-/// O jogador arrasta a peça do elemento Bromo (Br) e encaixa no soquete pra completar
-/// "BREAKING BAD". Ao encaixar: acende o Outline na porta, toca som de vitória e destranca.
-/// </summary>
+// RN04: encaixar a peça do Bromo no quadro completa "BREAKING BAD" e destranca a porta.
 public class PuzzleBromo : MonoBehaviour
 {
     [SerializeField] private XRSocketInteractor soquete;
@@ -22,10 +18,7 @@ public class PuzzleBromo : MonoBehaviour
     [SerializeField] private AudioSource audioVitoria;
     [SerializeField] private float outlineWidthVitoria = 5f;
 
-    [Tooltip("Quando encaixa, a peça muda pra essa cor (a mesma do fundo do quadro), como se fosse fixada nele")]
     [SerializeField] private Color corDaPecaFixada = new Color(0.09f, 0.2f, 0.15f);
-
-    [Tooltip("Marcador visual do encaixe: some quando a peça é colocada, deixando só o quadro escrito")]
     [SerializeField] private GameObject marcadorEncaixe;
 
     private bool resolvido = false;
@@ -54,11 +47,9 @@ public class PuzzleBromo : MonoBehaviour
         if (textoQuadro != null)
             textoQuadro.text = textoCompleto;
 
-        // esconde o marcador do encaixe, pra sobrar só o quadro com a palavra completa
         if (marcadorEncaixe != null)
             marcadorEncaixe.SetActive(false);
 
-        // trava a peça encaixada, pra não dar pra puxar de volta depois de resolvido
         if (peca != null)
         {
             peca.enabled = false;
@@ -76,7 +67,6 @@ public class PuzzleBromo : MonoBehaviour
             porta.Destrancar();
     }
 
-    // some com o "35 / Br / Bromo" da peça, pra sobrar só o quadrado na cor do quadro
     private void EsconderEscritaDaPeca(GameObject objetoPeca)
     {
         foreach (var texto in objetoPeca.GetComponentsInChildren<TextMeshPro>(true))
@@ -87,8 +77,6 @@ public class PuzzleBromo : MonoBehaviour
     {
         if (rendererPeca == null) return;
 
-        // seta direto em _BaseColor/_Color, porque Renderer.material.color pode
-        // não bater na propriedade que o shader URP realmente usa
         Material mat = rendererPeca.material;
         if (mat.HasProperty("_BaseColor"))
             mat.SetColor("_BaseColor", corDaPecaFixada);

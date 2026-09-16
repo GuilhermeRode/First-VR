@@ -15,12 +15,20 @@ public class HeadCollisionDetector : MonoBehaviour
  (Vector3 position, float distance, LayerMask mask)
  {
  List<RaycastHit> detectedHits = new();
+
+ // direcoes no plano do chao, para funcionar mesmo olhando para baixo
+ Vector3 frente = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+ if (frente.sqrMagnitude < 0.0001f)
+  frente = Vector3.ProjectOnPlane(transform.up, Vector3.up);
+ frente.Normalize();
+ Vector3 direita = Vector3.Cross(Vector3.up, frente);
+
  List<Vector3> directions
- = new() { transform.forward, transform.right, -transform.right };
+ = new() { frente, direita, -direita, -frente };
  RaycastHit hit;
  foreach (var dir in directions)
- { 
-    if (Physics.Raycast(position, dir, out hit, distance, mask))
+ {
+    if (Physics.Raycast(position, dir, out hit, distance, mask, QueryTriggerInteraction.Ignore))
  {
  detectedHits.Add(hit);
  }

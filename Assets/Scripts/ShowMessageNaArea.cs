@@ -2,11 +2,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-/// <summary>
-/// RN06 - Fim de jogo: dispara quando o jogador pisa (ou se teleporta) nesta area,
-/// que fica fora do laboratorio, depois da segunda porta. Congela o jogo, tira o
-/// movimento e chama a animacao de vitoria.
-/// </summary>
+// RN06: o jogo termina quando o jogador chega nesta area, fora do laboratorio.
 public class ShowMessageNaArea : MonoBehaviour
 {
     public Transform playerCamera;
@@ -37,7 +33,6 @@ public class ShowMessageNaArea : MonoBehaviour
 
     private void Vencer()
     {
-        // a animacao roda em tempo nao escalado, por isso pode congelar antes
         if (animacaoVitoria != null)
             animacaoVitoria.Mostrar();
 

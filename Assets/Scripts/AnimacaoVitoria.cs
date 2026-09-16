@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-/// <summary>
-/// RN06 - Animacao de vitoria, disparada quando o jogador sai do laboratorio.
-/// O painel cai na frente do jogador girando e estourando a escala, as letras
-/// despencam uma a uma e depois ficam ondulando, e cai uma chuva de confete
-/// em volta. Tudo em tempo nao escalado, porque o jogo congela (timeScale = 0)
-/// assim que o jogador vence.
-/// </summary>
+// RN06: painel de vitoria com confete. Usa tempo nao escalado porque o jogo
+// fica pausado (timeScale = 0) depois que o jogador vence.
 public class AnimacaoVitoria : MonoBehaviour
 {
     [SerializeField] private Transform painel;
@@ -39,11 +34,11 @@ public class AnimacaoVitoria : MonoBehaviour
 
     private static readonly Color[] coresDoConfete =
     {
-        new Color(1f, 0.84f, 0.1f),    // dourado
-        new Color(0.15f, 0.85f, 0.9f), // ciano (a cor do Br)
-        new Color(0.95f, 0.3f, 0.55f), // rosa
-        new Color(0.4f, 0.9f, 0.4f),   // verde
-        new Color(1f, 1f, 1f),         // branco
+        new Color(1f, 0.84f, 0.1f),
+        new Color(0.15f, 0.85f, 0.9f),
+        new Color(0.95f, 0.3f, 0.55f),
+        new Color(0.4f, 0.9f, 0.4f),
+        new Color(1f, 1f, 1f),
     };
 
     private readonly List<Transform> confetes = new List<Transform>();
@@ -51,7 +46,6 @@ public class AnimacaoVitoria : MonoBehaviour
     private readonly List<Vector3> giros = new List<Vector3>();
     private Transform raizDoConfete;
 
-    // o painel comeca desativado na cena: quem liga e o Mostrar()
     public void Mostrar()
     {
         gameObject.SetActive(true);
@@ -69,8 +63,6 @@ public class AnimacaoVitoria : MonoBehaviour
         if (cameraJogador == null)
             return;
 
-        // so a direcao horizontal, pra o painel nao nascer torto se o jogador
-        // estiver olhando pra cima ou pra baixo
         Vector3 frente = cameraJogador.forward;
         frente.y = 0f;
         if (frente.sqrMagnitude < 0.001f)
@@ -88,7 +80,7 @@ public class AnimacaoVitoria : MonoBehaviour
         Quaternion giroFinal = transform.rotation;
         Quaternion giroTorto = giroFinal * Quaternion.Euler(0f, 0f, giroDeEntrada);
 
-        // --- entrada: painel desentorta e estoura a escala, letras despencam ---
+        // entrada
         float t = 0f;
         while (t < duracaoEntrada)
         {
@@ -119,7 +111,7 @@ public class AnimacaoVitoria : MonoBehaviour
             grupo.alpha = 1f;
         transform.rotation = giroFinal;
 
-        // --- repouso: o painel flutua, as letras ondulam, o confete continua caindo ---
+        // repouso
         Vector3 posicaoBase = transform.position;
         while (true)
         {
@@ -142,10 +134,6 @@ public class AnimacaoVitoria : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Mexe direto nos vertices do TMP: na entrada cada letra cai do alto com um
-    /// atraso propria, e depois todas ficam ondulando em onda senoidal.
-    /// </summary>
     private void AnimarLetras(float progressoDaEntrada, float tempo)
     {
         texto.ForceMeshUpdate();
@@ -157,7 +145,6 @@ public class AnimacaoVitoria : MonoBehaviour
             if (!caractere.isVisible)
                 continue;
 
-            // cada letra entra um pouquinho depois da anterior
             float atraso = i * 0.025f;
             float entradaDaLetra = Mathf.Clamp01((progressoDaEntrada - atraso) / 0.35f);
             float queda = (1f - entradaDaLetra) * (1f - entradaDaLetra) * 90f;
@@ -198,7 +185,6 @@ public class AnimacaoVitoria : MonoBehaviour
             pedaco.transform.SetParent(raizDoConfete, false);
             pedaco.transform.localPosition = PosicaoSorteada(true);
             pedaco.transform.localRotation = Random.rotation;
-            // achatado, pra parecer papelzinho e nao cubo
             pedaco.transform.localScale = new Vector3(tamanhoDoConfete,
                                                       tamanhoDoConfete * 1.6f,
                                                       tamanhoDoConfete * 0.15f);
@@ -232,8 +218,6 @@ public class AnimacaoVitoria : MonoBehaviour
         if (rendererConfete == null)
             return;
 
-        // seta direto em _BaseColor/_Color: no URP o .color nem sempre bate na
-        // propriedade que o shader usa
         Material material = rendererConfete.material;
         if (material.HasProperty("_BaseColor"))
             material.SetColor("_BaseColor", cor);
@@ -251,14 +235,12 @@ public class AnimacaoVitoria : MonoBehaviour
             if (pedaco == null)
                 continue;
 
-            // balanca de lado enquanto cai, pra nao descer em linha reta
             Vector3 queda = quedas[i];
             float balanco = Mathf.Sin(Time.unscaledTime * 2f + i) * 0.12f;
 
             pedaco.localPosition += new Vector3(queda.x + balanco, queda.y, queda.z) * dt;
             pedaco.Rotate(giros[i] * dt, Space.Self);
 
-            // chegou embaixo: volta pro alto
             if (pedaco.localPosition.y < -alturaDaChuva * 0.6f)
                 pedaco.localPosition = PosicaoSorteada(false);
         }
@@ -275,19 +257,15 @@ public class AnimacaoVitoria : MonoBehaviour
         raizDoConfete = null;
     }
 
-    /// <summary>
-    /// Curva de "pop": sobe passando do ponto (exageroDaEscala) e volta pro 1.
-    /// </summary>
+    // sobe ate exageroDaEscala e volta para 1
     private float EscalaComExagero(float p)
     {
         if (p < 0.6f)
         {
-            // 0 -> exagero, desacelerando
             float q = p / 0.6f;
             return Mathf.Lerp(0f, exageroDaEscala, 1f - (1f - q) * (1f - q));
         }
 
-        // exagero -> 1, assentando
         float r = (p - 0.6f) / 0.4f;
         return Mathf.Lerp(exageroDaEscala, 1f, r * r * (3f - 2f * r));
     }

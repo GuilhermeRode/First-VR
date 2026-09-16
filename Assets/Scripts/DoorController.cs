@@ -41,7 +41,6 @@ public class DoorController : MonoBehaviour
         interactable.selectEntered.AddListener(_ => AlternarPorta());
     }
 
-    /// <summary>RN04 - chamado pelo PuzzleAmostra quando o jogador resolve o puzzle.</summary>
     public void Destrancar()
     {
         trancada = false;

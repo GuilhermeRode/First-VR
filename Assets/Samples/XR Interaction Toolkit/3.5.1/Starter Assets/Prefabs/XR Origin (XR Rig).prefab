@@ -1971,7 +1971,7 @@ PrefabInstance:
       objectReference: {fileID: 8718302446126152263}
     - target: {fileID: 2761784063978902503, guid: c1800acf6366418a9b5f610249000331, type: 3}
       propertyPath: m_RaycastMask.m_Bits
-      value: 2147483681
+      value: 2147483689
       objectReference: {fileID: 0}
     - target: {fileID: 2761784063978902503, guid: c1800acf6366418a9b5f610249000331, type: 3}
       propertyPath: m_SelectInput.m_InputActionReferenceValue
