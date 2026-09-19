@@ -16,19 +16,18 @@ public class HeadCollisionDetector : MonoBehaviour
  {
  List<RaycastHit> detectedHits = new();
 
- // direcoes no plano do chao, para funcionar mesmo olhando para baixo
- Vector3 frente = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
- if (frente.sqrMagnitude < 0.0001f)
-  frente = Vector3.ProjectOnPlane(transform.up, Vector3.up);
- frente.Normalize();
- Vector3 direita = Vector3.Cross(Vector3.up, frente);
-
+ // flat directions, so looking down still detects the wall
+ Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+ if (forward.sqrMagnitude < 0.0001f)
+ forward = Vector3.ProjectOnPlane(transform.up, Vector3.up);
+ forward.Normalize();
+ Vector3 right = Vector3.Cross(Vector3.up, forward);
  List<Vector3> directions
- = new() { frente, direita, -direita, -frente };
+ = new() { forward, right, -right, -forward };
  RaycastHit hit;
  foreach (var dir in directions)
  {
-    if (Physics.Raycast(position, dir, out hit, distance, mask, QueryTriggerInteraction.Ignore))
+ if (Physics.Raycast(position, dir, out hit, distance, mask))
  {
  detectedHits.Add(hit);
  }

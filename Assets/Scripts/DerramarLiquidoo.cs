@@ -28,7 +28,8 @@ public class DerramarLiquido : MonoBehaviour
  }
 
  float angulo = Vector3.Angle(transform.up, Vector3.up);
- bool podeDerramar = angulo > anguloMin && origem.TemLiquido;
+ bool podeDerramar = angulo > anguloMin && origem.TemLiquido
+  && destino != null && destino.EspacoDisponivel > 0f;
 
  if (podeDerramar)
  {

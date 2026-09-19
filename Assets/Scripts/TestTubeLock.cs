@@ -6,12 +6,10 @@ public class TestTubeLock : MonoBehaviour
  private Transform rackTopLimit; // ponto acima do rack
  [SerializeField]
  private Transform socketPoint; // ponto no meio do furo do rack
- private UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable grab;
  private Rigidbody rb;
  private bool isLockedInRack = true;
  void Start()
  {
- grab = GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
  rb = GetComponent<Rigidbody>();
  LockInRack();
  }

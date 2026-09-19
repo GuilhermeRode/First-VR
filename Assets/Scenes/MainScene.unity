@@ -1695,7 +1695,6 @@ MonoBehaviour:
   porta: {fileID: 737392576}
   outlinePorta: {fileID: 99855131}
   audioVitoria: {fileID: 58602406}
-  outlineWidthVitoria: 5
 --- !u!4 &58602408
 Transform:
   m_ObjectHideFlags: 0
@@ -10019,6 +10018,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleBromo
   soquete: {fileID: 1389306356}
+  pecaDoBromo: {fileID: 770909812}
   textoQuadro: {fileID: 536335221}
   textoIncompleto: 'EAKING
 
@@ -10029,7 +10029,6 @@ MonoBehaviour:
   porta: {fileID: 2117058824}
   outlinePorta: {fileID: 1699099864}
   audioVitoria: {fileID: 536335219}
-  outlineWidthVitoria: 5
   corDaPecaFixada: {r: 0.09, g: 0.2, b: 0.15, a: 1}
   marcadorEncaixe: {fileID: 22248867}
 --- !u!114 &536335221
@@ -10884,7 +10883,6 @@ MonoBehaviour:
   alturaDosOlhos: -0.15
   duracaoEntrada: 0.7
   exageroDaEscala: 1.15
-  giroDeEntrada: 12
   corInicial: {r: 1, g: 1, b: 1, a: 1}
   corDourada: {r: 1, g: 0.84, b: 0.1, a: 1}
   quantidadeDeConfete: 70

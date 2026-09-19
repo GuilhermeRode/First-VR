@@ -27,11 +27,9 @@ public class RecipienteLiquido : MonoBehaviour
     private readonly List<RecipienteLiquido> origensMisturadas = new List<RecipienteLiquido>();
 
     public float VolumeAtual => volumeAtual;
-    public float CapacidadeMaxima => capacidadeMaxima;
-    public float Fracao => capacidadeMaxima > 0f ? Mathf.Clamp01(volumeAtual / capacidadeMaxima) : 0f;
     public bool TemLiquido => volumeAtual > 0.0001f;
     public float EspacoDisponivel => Mathf.Max(0f, capacidadeMaxima - volumeAtual);
-    public Color Cor => cor;
+    private float Fracao => capacidadeMaxima > 0f ? Mathf.Clamp01(volumeAtual / capacidadeMaxima) : 0f;
 
     private void Awake()
     {

@@ -33,13 +33,11 @@ public class ShowMessageNaArea : MonoBehaviour
 
     private void Vencer()
     {
-        if (animacaoVitoria != null)
-            animacaoVitoria.Mostrar();
+        animacaoVitoria.Mostrar();
 
-        Time.timeScale = 0;                 // pausar o jogo
-        locomotionSystem.enabled = false;   // nao conseguir mais andar
-
-        leftRay.enabled = false;            // desativa linha de teleporte do controle esquerdo
-        rightRay.enabled = false;           // desativa linha de teleporte do controle direito
+        Time.timeScale = 0;
+        locomotionSystem.enabled = false;
+        leftRay.enabled = false;
+        rightRay.enabled = false;
     }
 }

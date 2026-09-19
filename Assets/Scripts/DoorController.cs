@@ -21,10 +21,10 @@ public class DoorController : MonoBehaviour
     [Tooltip("Outline da porta: some quando ela termina de abrir")]
     public Outline outlinePorta;
 
-    [Tooltip("Se marcado, a porta começa trancada e só abre depois de PuzzleAmostra chamar Destrancar()")]
+    [Tooltip("Se marcado, a porta começa trancada e só abre depois que o puzzle do quadro é resolvido")]
     public bool comecaTrancada = true;
 
-    private bool aberta = false;
+    private bool aberta;
     private bool trancada;
     private Quaternion rotacaoFechada;
     private Quaternion rotacaoAberta;

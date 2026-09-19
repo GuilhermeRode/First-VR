@@ -8,79 +8,58 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class PuzzleBromo : MonoBehaviour
 {
     [SerializeField] private XRSocketInteractor soquete;
+    [SerializeField] private XRGrabInteractable pecaDoBromo;
     [SerializeField] private TextMeshPro textoQuadro;
-    [SerializeField] private string textoIncompleto = "__EAKING BAD";
-    [SerializeField] private string textoCompleto = "BREAKING BAD";
+    [SerializeField] private string textoIncompleto = "EAKING\nBAD";
+    [SerializeField] private string textoCompleto = "BREAKING\nBAD";
 
     [Header("Ao resolver")]
     [SerializeField] private DoorController porta;
     [SerializeField] private Outline outlinePorta;
     [SerializeField] private AudioSource audioVitoria;
-    [SerializeField] private float outlineWidthVitoria = 5f;
-
     [SerializeField] private Color corDaPecaFixada = new Color(0.09f, 0.2f, 0.15f);
     [SerializeField] private GameObject marcadorEncaixe;
 
-    private bool resolvido = false;
+    private bool resolvido;
 
     private void Start()
     {
-        if (textoQuadro != null)
-            textoQuadro.text = textoIncompleto;
-
-        if (soquete != null)
-            soquete.selectEntered.AddListener(OnPecaEncaixada);
+        textoQuadro.text = textoIncompleto;
+        soquete.selectEntered.AddListener(OnPecaEncaixada);
     }
 
     private void OnPecaEncaixada(SelectEnterEventArgs args)
     {
-        if (resolvido)
+        // só a peça do bromo resolve: qualquer outra coisa encaixada é ignorada
+        if (resolvido || args.interactableObject as XRGrabInteractable != pecaDoBromo)
             return;
 
-        Resolver(args.interactableObject as XRGrabInteractable);
+        Resolver();
     }
 
-    private void Resolver(XRGrabInteractable peca)
+    private void Resolver()
     {
         resolvido = true;
+        textoQuadro.text = textoCompleto;
+        marcadorEncaixe.SetActive(false);
 
-        if (textoQuadro != null)
-            textoQuadro.text = textoCompleto;
+        pecaDoBromo.enabled = false;
+        FixarCorDaPeca();
+        EsconderEscritaDaPeca();
 
-        if (marcadorEncaixe != null)
-            marcadorEncaixe.SetActive(false);
-
-        if (peca != null)
-        {
-            peca.enabled = false;
-            FixarCorDaPeca(peca.GetComponent<Renderer>());
-            EsconderEscritaDaPeca(peca.gameObject);
-        }
-
-        if (outlinePorta != null)
-            outlinePorta.OutlineWidth = outlineWidthVitoria;
-
-        if (audioVitoria != null)
-            audioVitoria.Play();
-
-        if (porta != null)
-            porta.Destrancar();
+        outlinePorta.OutlineWidth = 5f;
+        audioVitoria.Play();
+        porta.Destrancar();
     }
 
-    private void EsconderEscritaDaPeca(GameObject objetoPeca)
+    private void EsconderEscritaDaPeca()
     {
-        foreach (var texto in objetoPeca.GetComponentsInChildren<TextMeshPro>(true))
+        foreach (TextMeshPro texto in pecaDoBromo.GetComponentsInChildren<TextMeshPro>(true))
             texto.gameObject.SetActive(false);
     }
 
-    private void FixarCorDaPeca(Renderer rendererPeca)
+    private void FixarCorDaPeca()
     {
-        if (rendererPeca == null) return;
-
-        Material mat = rendererPeca.material;
-        if (mat.HasProperty("_BaseColor"))
-            mat.SetColor("_BaseColor", corDaPecaFixada);
-        if (mat.HasProperty("_Color"))
-            mat.SetColor("_Color", corDaPecaFixada);
+        pecaDoBromo.GetComponent<Renderer>().material.SetColor("_BaseColor", corDaPecaFixada);
     }
 }

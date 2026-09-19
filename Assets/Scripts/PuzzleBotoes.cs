@@ -12,18 +12,13 @@ public class PuzzleBotoes : MonoBehaviour
     [SerializeField] private EventosPortaCorrer porta;
     [SerializeField] private Outline outlinePorta;
     [SerializeField] private AudioSource audioVitoria;
-    [SerializeField] private float outlineWidthVitoria = 5f;
 
-    private int pressoes = 0;
-    private bool resolvido = false;
+    private int pressoes;
+    private bool resolvido;
 
     private void Start()
     {
-        if (outlinePorta != null)
-            outlinePorta.OutlineWidth = 0f;
-
-        if (botaoDoMeio != null)
-            botaoDoMeio.selectEntered.AddListener(OnBotaoDoMeioPressionado);
+        botaoDoMeio.selectEntered.AddListener(OnBotaoDoMeioPressionado);
     }
 
     private void OnBotaoDoMeioPressionado(SelectEnterEventArgs args)
@@ -39,14 +34,8 @@ public class PuzzleBotoes : MonoBehaviour
     private void Resolver()
     {
         resolvido = true;
-
-        if (outlinePorta != null)
-            outlinePorta.OutlineWidth = outlineWidthVitoria;
-
-        if (audioVitoria != null)
-            audioVitoria.Play();
-
-        if (porta != null)
-            porta.Destrancar();
+        outlinePorta.OutlineWidth = 5f;
+        audioVitoria.Play();
+        porta.Destrancar();
     }
 }
